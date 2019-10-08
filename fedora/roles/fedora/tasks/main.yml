@@ -1,0 +1,43 @@
+---
+# tasks file for fedora
+
+- name: Create a 2048-bit SSH key for user hoge in ~hoge/.ssh/id_rsa
+  user:
+    name: hoge
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+
+- name: upgrade all packages
+  dnf:
+    name: "*"
+    state: latest
+
+- name: install the latest version of git
+  dnf:
+    name: git
+    state: latest
+
+- name: install the latest version of AWS-CLI
+  dnf:
+    name: awscli
+    state: latest
+
+- name: install the latest version of node.js
+  dnf:
+    name: nodejs
+    state: latest
+
+- name: Install "npm scripts" node.js package globally.
+  npm:
+    name: "{{ item }}"
+    global: yes
+  with_items:
+    - npm-run-all
+    - run-p
+    - run-s
+
+- name: Autoremove unneeded packages installed as dependencies
+  dnf:
+    autoremove: yes
+
